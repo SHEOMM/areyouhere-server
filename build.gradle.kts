@@ -45,6 +45,8 @@ dependencies {
     implementation("io.vertx:vertx-jdbc-client:4.5.12")
     implementation("io.vertx:vertx-mysql-client:4.5.12")
     implementation("io.smallrye.reactive:mutiny-kotlin:2.8.0")
+    // database
+    runtimeOnly("com.h2database:h2")
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")

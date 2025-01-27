@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: areyouhere
+  profiles:
+    active: local
+  config:
+    import:
+      - application-local.yaml
+      - application-dev.yaml
+      - application-release.yaml
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 60m
