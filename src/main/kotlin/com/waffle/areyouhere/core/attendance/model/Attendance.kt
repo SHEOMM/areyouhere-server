@@ -1,7 +1,7 @@
-package com.waffle.areyouhere.core.attendance.domain.entity
+package com.waffle.areyouhere.core.attendance.model
 
-import com.waffle.areyouhere.core.attendee.domain.entity.Attendee
-import com.waffle.areyouhere.core.section.domain.entity.Section
+import com.waffle.areyouhere.core.attendee.model.Attendee
+import com.waffle.areyouhere.core.section.model.Section
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType

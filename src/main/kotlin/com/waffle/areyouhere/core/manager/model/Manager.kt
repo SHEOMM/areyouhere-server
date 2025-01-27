@@ -1,4 +1,4 @@
-package com.waffle.areyouhere.core.manager.domain.entity
+package com.waffle.areyouhere.core.manager.model
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

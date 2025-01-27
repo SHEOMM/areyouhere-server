@@ -1,6 +1,6 @@
-package com.waffle.areyouhere.core.section.domain.entity
+package com.waffle.areyouhere.core.attendee.model
 
-import com.waffle.areyouhere.core.course.domain.entity.Course
+import com.waffle.areyouhere.core.course.model.Course
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
@@ -9,16 +9,15 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 
-@Entity
-class Section(
+@Entity(name = "attendee")
+class Attendee(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     var name: String,
 
-    // TODO: 필요한지 논의.
-    var isDeactivated: Boolean,
+    var note: String? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
