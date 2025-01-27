@@ -14,7 +14,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 
 @Entity(name = "attendance")
-class Attendance (
+class Attendance(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 16, nullable = false)
@@ -30,6 +30,5 @@ class Attendance (
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    var status: AttendanceType
-
+    var status: AttendanceType,
 )

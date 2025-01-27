@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 
 @Entity(name = "manager")
-class Manager (
+class Manager(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
@@ -16,5 +16,4 @@ class Manager (
     var name: String,
 
     var password: String,
-
 )
