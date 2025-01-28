@@ -4,10 +4,10 @@ import com.linecorp.kotlinjdsl.dsl.jpql.jpql
 import com.linecorp.kotlinjdsl.render.jpql.JpqlRenderContext
 import com.linecorp.kotlinjdsl.support.hibernate.reactive.extension.createQuery
 import com.waffle.areyouhere.core.manager.model.Manager
+import io.smallrye.mutiny.converters.uni.UniReactorConverters
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.toMono
 
 @Repository
 class ManagerRepository(
@@ -23,6 +23,6 @@ class ManagerRepository(
         }
         return sessionFactory.withSession {
             it.createQuery(query, context).setMaxResults(1).singleResult
-        }.await().indefinitely().toMono()
+        }.convert().with(UniReactorConverters.toMono())
     }
 }

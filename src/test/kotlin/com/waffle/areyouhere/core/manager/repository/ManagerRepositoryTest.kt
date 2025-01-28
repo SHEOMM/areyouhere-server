@@ -1,5 +1,6 @@
 package com.waffle.areyouhere.core.manager.repository
 
+import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +15,9 @@ class ManagerRepositoryTest {
     @Test
     fun `레포지토리 첫 테스트`() {
         runBlocking {
-            println(managerRepository.findById(123L))
+            managerRepository.findById(123L).awaitSingleOrNull()?.let {
+                println("Found manager with id ${it.id}: ${it.name}, ${it.email}, ${it.password}")
+            }
         }
     }
 }
