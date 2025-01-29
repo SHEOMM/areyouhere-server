@@ -66,4 +66,44 @@ open class BaseRepository<T : Any, ID : Any>(
             session.createMutationQuery(query, context).executeUpdate()
         }.awaitSuspending()
     }
+
+    suspend fun findAll(): List<T> {
+        val query = SelectQueries.selectQuery(
+            returnType = entityClass,
+            distinct = false,
+            select = listOf(Entities.entity(entityClass)),
+            from = listOf(Entities.entity(entityClass)),
+        )
+        return sessionFactory.withTransaction { session ->
+            session.createQuery(query, context).resultList
+        }.awaitSuspending()
+    }
+
+    suspend fun existsById(id: ID): Boolean {
+        val query = SelectQueries.selectQuery(
+            returnType = Long::class,
+            distinct = false,
+            select = listOf(Expressions.count(distinct = false, Paths.path(idRef).toExpression())),
+            from = listOf(Entities.entity(entityClass)),
+            where = Predicates.equal(
+                Paths.path(Entities.entity(entityClass), idRef).toExpression(),
+                Expressions.value(id),
+            ),
+        )
+        return sessionFactory.withTransaction { session ->
+            session.createQuery(query, context).setMaxResults(1).singleResult
+        }.awaitSuspending() > 0
+    }
+
+    suspend fun count(): Long {
+        val query = SelectQueries.selectQuery(
+            returnType = Long::class,
+            distinct = false,
+            select = listOf(Expressions.count(distinct = false, Paths.path(idRef).toExpression())),
+            from = listOf(Entities.entity(entityClass)),
+        )
+        return sessionFactory.withTransaction { session ->
+            session.createQuery(query, context).setMaxResults(1).singleResult
+        }.awaitSuspending() ?: 0
+    }
 }
