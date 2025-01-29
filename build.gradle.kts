@@ -49,7 +49,6 @@ dependencies {
     implementation("io.vertx:vertx-jdbc-client:4.5.12")
     implementation("io.vertx:vertx-mysql-client:4.5.12")
     implementation("io.smallrye.reactive:mutiny-kotlin:2.8.0")
-    implementation("io.smallrye.reactive:mutiny-reactor:2.8.0")
     implementation("io.agroal:agroal-api:1.16")
     implementation("io.agroal:agroal-pool:1.16")
     // database
