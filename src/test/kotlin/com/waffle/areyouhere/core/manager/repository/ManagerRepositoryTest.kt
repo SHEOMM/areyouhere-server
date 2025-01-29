@@ -23,7 +23,13 @@ class ManagerRepositoryTest {
             )
             val saveManager = managerRepository.save(manager)
             val foundManager = managerRepository.findById(manager.id!!)
-            assertEquals(saveManager.id, foundManager.id)
+            assertEquals(saveManager.id, foundManager!!.id)
+
+            val deleteCount = managerRepository.deleteById(manager.id!!)
+            assertEquals(1, deleteCount)
+
+            val notFoundManager = managerRepository.findById(manager.id!!)
+            assertEquals(null, notFoundManager)
         }
     }
 }
