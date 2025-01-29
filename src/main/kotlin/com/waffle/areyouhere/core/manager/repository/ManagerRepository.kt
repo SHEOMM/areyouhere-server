@@ -26,6 +26,17 @@ class ManagerRepository(
         }.awaitSuspending()
     }
 
+    // TODO: exists extension function 만들어서 효율좋게 해보기.
+    suspend fun findByEmail(email: String): Manager? {
+        val query = jpql(CustomJpql) {
+            selectFrom(Manager::class)
+                .where(path(Manager::email).eq(email))
+        }
+        return sessionFactory.withSession {
+            it.createQuery(query, context).setMaxResults(1).resultList
+        }.awaitSuspending().firstOrNull()
+    }
+
     suspend fun save(manager: Manager): Manager {
         return sessionFactory.withTransaction { session, tx ->
             session.persist(manager).chain(session::flush).replaceWith(manager)
