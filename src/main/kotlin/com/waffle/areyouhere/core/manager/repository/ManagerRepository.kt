@@ -10,6 +10,7 @@ import io.smallrye.mutiny.coroutines.awaitSuspending
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory
 import org.springframework.stereotype.Repository
 
+// FIXME: 구현 상 세션이 매번 새로 열린다.
 @Repository
 class ManagerRepository(
     private val sessionFactory: SessionFactory,
@@ -24,6 +25,17 @@ class ManagerRepository(
         return sessionFactory.withSession {
             it.createQuery(query, context).setMaxResults(1).singleResult
         }.awaitSuspending()
+    }
+
+    // TODO: exists extension function 만들어서 효율좋게 해보기.
+    suspend fun findByEmail(email: String): Manager? {
+        val query = jpql(CustomJpql) {
+            selectFrom(Manager::class)
+                .where(path(Manager::email).eq(email))
+        }
+        return sessionFactory.withSession {
+            it.createQuery(query, context).setMaxResults(1).resultList
+        }.awaitSuspending().firstOrNull()
     }
 
     suspend fun save(manager: Manager): Manager {
