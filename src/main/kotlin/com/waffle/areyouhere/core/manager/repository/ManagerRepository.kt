@@ -10,6 +10,7 @@ import io.smallrye.mutiny.coroutines.awaitSuspending
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory
 import org.springframework.stereotype.Repository
 
+// FIXME: 구현 상 세션이 매번 새로 열린다.
 @Repository
 class ManagerRepository(
     private val sessionFactory: SessionFactory,
