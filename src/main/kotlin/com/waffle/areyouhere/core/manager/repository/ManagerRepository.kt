@@ -6,8 +6,7 @@ import com.linecorp.kotlinjdsl.support.hibernate.reactive.extension.createMutati
 import com.linecorp.kotlinjdsl.support.hibernate.reactive.extension.createQuery
 import com.waffle.areyouhere.core.manager.model.Manager
 import com.waffle.areyouhere.util.CustomJpql
-import io.smallrye.mutiny.converters.uni.UniReactorConverters
-import kotlinx.coroutines.reactor.awaitSingle
+import io.smallrye.mutiny.coroutines.awaitSuspending
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory
 import org.springframework.stereotype.Repository
 
@@ -22,27 +21,24 @@ class ManagerRepository(
             selectFrom(Manager::class)
                 .where(path(Manager::id).eq(id))
         }
-        return sessionFactory.withTransaction { session ->
-            session.createQuery(query, context).setMaxResults(1).singleResult
-        }.convert().with(UniReactorConverters.toMono())
-            .awaitSingle()
+        return sessionFactory.withSession {
+            it.createQuery(query, context).setMaxResults(1).singleResult
+        }.awaitSuspending()
     }
 
     suspend fun save(manager: Manager): Manager {
-        return sessionFactory.withTransaction { session ->
+        return sessionFactory.withTransaction { session, tx ->
             session.persist(manager).chain(session::flush).replaceWith(manager)
-        }.convert().with(UniReactorConverters.toMono())
-            .awaitSingle()
+        }.awaitSuspending()
     }
 
-    suspend fun deleteById(id: Long): Int? {
+    suspend fun deleteById(id: Long) {
         val query = jpql(CustomJpql) {
             deleteFrom(entity(Manager::class))
                 .where(path(Manager::id).eq(id))
         }
-        return sessionFactory.withTransaction { session, tx ->
+        sessionFactory.withTransaction { session, tx ->
             session.createMutationQuery(query, context).executeUpdate()
-        }.convert().with(UniReactorConverters.toMono())
-            .awaitSingle()
+        }.awaitSuspending()
     }
 }

@@ -23,7 +23,6 @@ class ManagerRepositoryTest {
             )
             val saveManager = managerRepository.save(manager)
             val foundManager = managerRepository.findById(manager.id!!)
-            println("hello" + foundManager.id)
             assertEquals(saveManager.id, foundManager.id)
         }
     }
