@@ -2,7 +2,6 @@ package com.waffle.areyouhere.core.util
 
 import com.linecorp.kotlinjdsl.dsl.jpql.Jpql
 import com.linecorp.kotlinjdsl.dsl.jpql.JpqlDsl
-import com.linecorp.kotlinjdsl.dsl.jpql.select.SelectQueryFromStep
 import com.linecorp.kotlinjdsl.dsl.jpql.select.SelectQueryWhereStep
 import com.linecorp.kotlinjdsl.querymodel.QueryPart
 import com.linecorp.kotlinjdsl.querymodel.jpql.JpqlQueryable
@@ -15,8 +14,6 @@ import com.linecorp.kotlinjdsl.render.RenderContext
 import com.linecorp.kotlinjdsl.render.jpql.serializer.JpqlRenderSerializer
 import com.linecorp.kotlinjdsl.render.jpql.serializer.JpqlSerializer
 import com.linecorp.kotlinjdsl.render.jpql.writer.JpqlWriter
-import jakarta.persistence.EntityManager
-import org.springframework.stereotype.Component
 import kotlin.reflect.KClass
 
 data class JpqlLimit<T : Any>(
@@ -58,6 +55,8 @@ class CustomJpql : Jpql() {
 
         return Predicates.`in`(this.toExpression(), compareValues.map { Expressions.value(it) })
     }
+
+    // limit Extension
     inline fun <reified T : Any> JpqlQueryable<SelectQuery<T>>.limit(limit: Int): JpqlLimit<T> {
         return JpqlLimit(
             this.toQuery(),
@@ -67,11 +66,8 @@ class CustomJpql : Jpql() {
     }
 
     // select(entity).from(entity)의 반복을 막기 위해 from 절을 그대로 반환하는 custom dsl
-
     inline fun <reified T : Any> selectFrom(type: KClass<T>): SelectQueryWhereStep<T> {
         val entity = entity(type)
         return select(entity).from(entity)
     }
 }
-
-
