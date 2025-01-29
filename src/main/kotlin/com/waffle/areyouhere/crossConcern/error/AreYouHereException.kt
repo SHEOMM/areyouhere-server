@@ -7,3 +7,4 @@ open class AreYouHereException(
 ) : RuntimeException(errorMessage)
 
 object ManagerNotExistsException : AreYouHereException(ErrorType.BAD_REQUEST, displayMessage = "존재하지 않는 이메일입니다.")
+object UnauthenticatedException : AreYouHereException(ErrorType.UNAUTHORIZED, displayMessage = "인증되지 않은 사용자입니다.")

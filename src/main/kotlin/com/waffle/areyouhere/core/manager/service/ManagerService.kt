@@ -3,6 +3,7 @@ package com.waffle.areyouhere.core.manager.service
 import com.waffle.areyouhere.core.manager.dto.ManagerDTO
 import com.waffle.areyouhere.core.manager.model.Manager
 import com.waffle.areyouhere.core.manager.repository.ManagerRepository
+import com.waffle.areyouhere.crossConcern.error.UnauthenticatedException
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,7 +21,7 @@ class ManagerService(
     }
 
     suspend fun findById(id: Long): ManagerDTO {
-        return ManagerDTO(managerRepository.findById(id))
+        return ManagerDTO(managerRepository.findById(id) ?: throw UnauthenticatedException)
     }
 
     suspend fun findByEmail(email: String): ManagerDTO? {
