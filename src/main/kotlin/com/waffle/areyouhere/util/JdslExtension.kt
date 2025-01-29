@@ -1,4 +1,4 @@
-package com.waffle.areyouhere.core.util
+package com.waffle.areyouhere.util
 
 import com.linecorp.kotlinjdsl.dsl.jpql.Jpql
 import com.linecorp.kotlinjdsl.dsl.jpql.JpqlDsl

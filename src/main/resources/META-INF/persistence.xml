@@ -18,7 +18,7 @@
             <property name="jakarta.persistence.jdbc.password" value=""/>
             <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
 
-            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
 <!--            <property name="jakarta.persistence.schema-generation.create-source" value="script"/>-->
 <!--            <property name="jakarta.persistence.schema-generation.create-script-source" value="schema.sql"/>-->
 <!--            <property name="jakarta.persistence.schema-generation.drop-source" value="script"/>-->
