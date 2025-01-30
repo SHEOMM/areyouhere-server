@@ -1,17 +1,11 @@
-# areyouhere-server
+webflux의 코루틴 방식과 hibernate reactive를 조화롭게 사용하고 싶다는 생각이었는데
+몇가지 문제가 있어 불가능하다는 결론에 도달했습니다.
 
-## Architecture
-<img width="2192" alt="AreYouHere Architecture" src="https://github.com/wafflestudio/areyouhere-server/assets/81066222/4cf3e3b7-a236-4e5e-aad2-531a709b6196">
+기존 구현
+<img width="805" alt="image" src="https://github.com/user-attachments/assets/e76d1747-04db-4bd8-a6b3-a7999d10530a" />
 
-## Introduction
-![image](https://github.com/wafflestudio/areyouhere-server/assets/81066222/e46c1082-7510-4a25-b72e-2dc4b468d53f)
-![image](https://github.com/wafflestudio/areyouhere-server/assets/81066222/cd50b05a-535d-4bf0-95df-4679a6d86db3)
-![image](https://github.com/wafflestudio/areyouhere-server/assets/81066222/0fc7bf75-42c5-49b1-96a5-7205b5541737)
-![image](https://github.com/wafflestudio/areyouhere-server/assets/81066222/bf208863-d50c-423a-b5c2-a36235444a3a)
-![image](https://github.com/wafflestudio/areyouhere-server/assets/81066222/e7f6e6fa-1ceb-4f6b-8b61-f82bc415c276)
+이런 방식으로 구현할 경우 매번 세션을 새롭게 열고, 트랜잭션을 사용한다고 해도 마찬가지이므로 프로덕션에서 불가능한 방법이라고 판단했습니다.
+따라서 상위에서 session을 열고 매 인자로 session을 넘겨받거나, 코루틴에 requestScope 영역을 만들고 그곳에 session을 저장하는 등의 방법을 모색해서 테스트 해봤으나, hibernate reactive는 기본적으로 하나의 스레드에서 실행되는 것을 원칙으로 하고 있습니다. 세션 도중 스레드가 변경될 경우 강제로 exception을 발생시켜 코루틴과 같이 사용하는 것은 불가능하다는 결론에 도달했습니다.
+따라서 이 프로젝트는 리액티브로 마이그레이션 하는 것으로 변경하고 예시 코드를 올립니다.
 
-## Class Diagram
-![areyouhere_diagram drawio](https://github.com/wafflestudio/areyouhere-server/assets/81066222/b4eda3e1-2519-4004-8672-4286d2395b94)
-
-## ERD
-![areyouhere_ERD](https://github.com/wafflestudio/areyouhere-server/assets/81066222/15402f29-5146-483f-b3a1-647aee2df80e)
+또한 프로젝트의 기존 목표였던 webflux의 코루틴 방식 도전은 r2dbc로 옮겨 다시 해보려고 합니다. 또한 이 프로젝트는 앞선 프로젝트가 끝난 뒤 reactive 방식으로 구현할 예정이라 예시 PR을 올립니다.
