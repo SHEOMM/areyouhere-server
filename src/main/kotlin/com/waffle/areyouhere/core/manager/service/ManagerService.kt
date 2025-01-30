@@ -3,8 +3,10 @@ package com.waffle.areyouhere.core.manager.service
 import com.waffle.areyouhere.core.manager.dto.ManagerDTO
 import com.waffle.areyouhere.core.manager.model.Manager
 import com.waffle.areyouhere.core.manager.repository.ManagerRepository
-import com.waffle.areyouhere.crossConcern.error.UnauthenticatedException
+import io.smallrye.mutiny.Uni
+import org.hibernate.reactive.mutiny.Mutiny.Session
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Mono
 
 @Service
 class ManagerService(
@@ -21,11 +23,15 @@ class ManagerService(
     }
 
     suspend fun findById(id: Long): ManagerDTO {
-        return ManagerDTO(managerRepository.findById(id) ?: throw UnauthenticatedException)
+        return ManagerDTO(managerRepository.findById(id))
     }
 
-    suspend fun findByEmail(email: String): ManagerDTO? {
-        return managerRepository.findByEmail(email)?.let { ManagerDTO(it) }
+    fun findByEmail(email: String): Mono<Manager> {
+        return managerRepository.findByEmail(email)
+    }
+
+    fun findByEmail(email: String, session: Session): Uni<Manager> {
+        return managerRepository.findByEmail(email, session)
     }
 
     suspend fun existsByEmail(email: String): Boolean {

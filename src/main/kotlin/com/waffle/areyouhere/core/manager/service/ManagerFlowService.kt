@@ -1,6 +1,7 @@
 package com.waffle.areyouhere.core.manager.service
 
-import com.waffle.areyouhere.crossConcern.error.ManagerNotExistsException
+import io.smallrye.mutiny.Uni
+import org.hibernate.reactive.mutiny.Mutiny.SessionFactory
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -8,12 +9,13 @@ import org.springframework.stereotype.Service
 class ManagerFlowService(
     private val managerService: ManagerService,
     private val passwordEncoder: PasswordEncoder,
+    private val sessionFactory: SessionFactory,
 ) {
-    suspend fun login(email: String, password: String): Boolean {
-        val foundManager = managerService.findByEmail(email) ?: throw ManagerNotExistsException
-        if (passwordEncoder.matches(password, foundManager.password)) {
-            return true
+    fun login(email: String, password: String): Uni<Boolean> {
+        return sessionFactory.withSession { session ->
+            managerService.findByEmail(email, session)
+        }.map {
+            passwordEncoder.matches(password, it.password)
         }
-        return false
     }
 }
