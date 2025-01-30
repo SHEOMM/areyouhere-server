@@ -1,7 +1,6 @@
 package com.waffle.areyouhere.core.manager.repository
 
 import com.linecorp.kotlinjdsl.dsl.jpql.jpql
-import com.linecorp.kotlinjdsl.querymodel.jpql.delete.DeleteQuery
 import com.linecorp.kotlinjdsl.render.jpql.JpqlRenderContext
 import com.linecorp.kotlinjdsl.support.hibernate.reactive.extension.createMutationQuery
 import com.linecorp.kotlinjdsl.support.hibernate.reactive.extension.createQuery
@@ -10,7 +9,6 @@ import com.waffle.areyouhere.util.CustomJpql
 import io.smallrye.mutiny.Uni
 import io.smallrye.mutiny.converters.uni.UniReactorConverters
 import io.smallrye.mutiny.coroutines.awaitSuspending
-import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.hibernate.reactive.mutiny.Mutiny.Session
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory
 import org.springframework.stereotype.Repository
@@ -55,12 +53,6 @@ class ManagerRepository(
         return sessionFactory.withTransaction { session, tx ->
             session.persist(manager).chain(session::flush).replaceWith(manager)
         }.awaitSuspending()
-    }
-
-    class ManagerQuery{
-        companion object{
-            fun
-        }
     }
 
     suspend fun deleteById(id: Long) {

@@ -30,7 +30,7 @@ class ManagerService(
         return managerRepository.findByEmail(email)
     }
 
-    fun findByEmail(email: String, session: Session): Uni<Manager>{
+    fun findByEmail(email: String, session: Session): Uni<Manager> {
         return managerRepository.findByEmail(email, session)
     }
 

@@ -22,7 +22,7 @@ class ManagerController(
         return managerFlowService.login(loginRequestDto.email, loginRequestDto.password)
             .convert().with(UniReactorConverters.toMono())
             .map {
-                return@map if(it) ResponseEntity.status(HttpStatus.OK).build()
+                return@map if (it) ResponseEntity.status(HttpStatus.OK).build()
                 else ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
             }
     }
